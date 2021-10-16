@@ -25,7 +25,7 @@ pragma AbiHeader expire;
 contract HomeWork_2 {
  
  //Инициализируем ключ для сопоставления задач
- int8 public key = 1;
+ int8 public key = 0;
 //Инициализируем переменную для счёта открытых задач
  int8 public countOpenTasks = 0;
  

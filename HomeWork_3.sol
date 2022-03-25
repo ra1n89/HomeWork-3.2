@@ -4,32 +4,18 @@
  * TONDev is a part of TON OS (see http://ton.dev).
  */
  /*
-3.2. "Список задач"
-Структура (см лекцию по типам данных)
-+ название дела
-+ время добавления (см helloWorld)
-+ флаг выполненности дела (bool)
-Структуру размещаем в сопоставление int8 => struct (см лекцию по типам данных)
-должны быть доступны опции:
-+ добавить задачу (должен в сопоставление заполняться последовательный целочисленный ключ)
-- получить количество открытых задач (возвращает число)
-+ получить список задач
-+ получить описание задачи по ключу
-+ удалить задачу по ключу
-+ отметить задачу как выполненную по ключу
-*/
+
 pragma ton-solidity >= 0.35.0;
 pragma AbiHeader expire;
 
-// Задание 3.2 "Список задач"
+
 contract HomeWork_2 {
  
- //Инициализируем ключ для сопоставления задач
+
  int8 public key = 0;
-//Инициализируем переменную для счёта открытых задач
  int8 public countOpenTasks = 0;
  
- //Создаём задачу (название задачи, время добавления, флаг выполнения)
+
  struct  Task {
         string taskName;
         uint32  timestamp;
@@ -38,7 +24,6 @@ contract HomeWork_2 {
 
 Task task;
 
-//Создаём сопоставление по целочисленному ключу
 mapping (int8=>Task) public tasksArray;
 
 
@@ -51,7 +36,6 @@ modifier checkOwnerAndAccept {
 		_;
 	} 
 
-//Функция создания задачи и сопоставления ей порядкового целочисленного значения
 function setTask(string name, bool mark) public  checkOwnerAndAccept {
     key += 1;
     task.taskName = name;
@@ -59,35 +43,33 @@ function setTask(string name, bool mark) public  checkOwnerAndAccept {
     task.mark = mark;
     tasksArray[key] = task;
 
-//счётчик открытых задач
+//count opened tasks
     if (task.mark==true){
         countOpenTasks +=1;
         }
 }
 
-//- отметить задачу как выполненную по ключу
+//check task as done
 function setTaskAsDone(int8 taskKeyWhichIsDone) public checkOwnerAndAccept{ 
 
     tasksArray[taskKeyWhichIsDone].mark = false;
     
-    //счётчик открытых задач
+    
     countOpenTasks -=1;
 }
 
-// получить описание задачи по ключу
+/
 function getTask(int8 keyOfTaks) public view returns (Task){
     
     return tasksArray[keyOfTaks];
 }
 
-// удаление задачи по ключу
+// removing task
 function removeTask(int8 taskKeyToRemove) public checkOwnerAndAccept{ 
-    
-    //счётчик открытых задач
     if (tasksArray[taskKeyToRemove].mark==true){
         countOpenTasks -=1;
         }
-    //удаление
+
     delete tasksArray[taskKeyToRemove];
 }
 
